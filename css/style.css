@@ -1,4 +1,4 @@
-/* General Reset */
+/* Reset */
 * {
   margin: 0;
   padding: 0;
@@ -7,102 +7,98 @@
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #0f0f0f, #1b1b1b);
+  background: linear-gradient(145deg, #0a0a0a, #121212);
   color: #ffffff;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* Container */
+/* Layout */
 .container {
   padding: 20px;
-  max-width: 1000px;
+  max-width: 1100px;
   margin: auto;
 }
 
-/* Glassmorphism Header/Footer */
+/* Header */
 .glass-header, .glass-footer {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 20px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
   border-radius: 20px;
+  padding: 20px;
   text-align: center;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
 }
 
 .glass-header h1 {
-  font-size: 2.5rem;
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
   color: #00ffe5;
+  text-shadow: 0 0 10px #00ffe5;
+}
+
+.tagline {
+  font-style: italic;
+  color: #ccc;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
 }
 
 .title-link {
   text-decoration: none;
 }
 
-.tagline {
-  color: #aaa;
-  font-style: italic;
-  font-size: 0.95rem;
-}
-
-/* Player Stats Section */
+/* Player Stats */
 .player-stats {
   padding: 20px;
   border-radius: 20px;
-  background: #1a1a1a;
-  box-shadow: inset 8px 8px 15px #121212, inset -8px -8px 15px #232323;
+  background: #1b1b1b;
+  box-shadow: inset 8px 8px 15px #111, inset -8px -8px 15px #2a2a2a;
   margin-bottom: 30px;
 }
 
 .stat {
-  margin-bottom: 20px;
-  font-size: 1.05rem;
+  margin-bottom: 18px;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
 }
 
+/* Icons */
 .icon {
   font-size: 1.2rem;
   width: 24px;
   text-align: center;
 }
 
-.cash { color: #00ffcc; }
-.xp { color: #33ccff; }
-.health { color: #ff3366; }
-.energy { color: #f9d423; }
+.cash    { color: #00ffc3; }
+.xp      { color: #33ccff; }
+.health  { color: #ff3366; }
+.energy  { color: #f9d423; }
 
 /* Progress Bars */
 progress {
   -webkit-appearance: none;
-  appearance: none;
-  width: 200px;
+  width: 100%;
+  max-width: 250px;
   height: 10px;
   border-radius: 10px;
-  background: #333;
+  background: #2b2b2b;
   overflow: hidden;
-  margin-left: 10px;
+  flex-grow: 1;
 }
 
 progress::-webkit-progress-bar {
-  background: #333;
+  background: #2b2b2b;
 }
 
 progress::-webkit-progress-value {
-  background: linear-gradient(to right, #00ffe5, #0066ff);
+  background: linear-gradient(to right, #00ffe5, #0088ff);
   border-radius: 10px;
 }
 
-progress[value]::-webkit-progress-value.health {
-  background: linear-gradient(to right, #ff3366, #ff0066);
-}
-
-progress[value]::-webkit-progress-value.energy {
-  background: linear-gradient(to right, #f9d423, #ff4e50);
-}
-
-/* Glass Buttons */
+/* Navigation Grid */
 .action-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -112,34 +108,58 @@ progress[value]::-webkit-progress-value.energy {
 
 .glass-button {
   text-align: center;
-  padding: 20px;
-  border-radius: 16px;
-  font-size: 1rem;
-  font-weight: bold;
+  padding: 25px 20px;
+  border-radius: 18px;
   background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
   transition: all 0.3s ease;
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .glass-button:hover {
-  background: rgba(0, 255, 255, 0.1);
+  background: rgba(0, 255, 255, 0.08);
   transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
 }
 
 .glass-button i {
-  display: block;
-  margin-bottom: 8px;
   font-size: 1.4rem;
+  margin-bottom: 6px;
   color: #00ffe5;
 }
 
 /* Footer */
 .glass-footer {
   font-size: 0.9rem;
-  opacity: 0.7;
+  opacity: 0.75;
+  padding-top: 10px;
+}
+
+/* Media Queries */
+@media (max-width: 600px) {
+  .stat {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  progress {
+    width: 100%;
+  }
+
+  .glass-button {
+    font-size: 0.95rem;
+    padding: 20px 15px;
+  }
+
+  .glass-button i {
+    font-size: 1.2rem;
+  }
   }
