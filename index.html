@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Crime Lords - Dashboard</title>
 
-  <!-- Font Awesome -->
+  <!-- Font Awesome Icons -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
@@ -14,49 +14,40 @@
     referrerpolicy="no-referrer"
   />
 
-  <!-- Custom Style -->
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <div class="container">
-    
+
     <!-- Header -->
     <header class="glass-header">
-      <a href="index.html" class="title-link"><h1>Crime Lords</h1></a>
+      <a href="index.html" class="title-link"><h1><i class="fas fa-skull-crossbones"></i> Crime Lords</h1></a>
       <p class="tagline">Rule the streets. Dominate the underworld.</p>
     </header>
 
-    <!-- Player Stats with Progress Bars -->
+    <!-- Player Stats Panel -->
     <section class="player-stats glass-box">
-      <div class="stat">
-        <i class="fas fa-money-bill-wave icon cash"></i>
-        <span>Cash:</span> $5,000
+      <div class="stat"><i class="fas fa-money-bill-wave cash icon"></i> Cash: $5,000</div>
+      <div class="stat"><i class="fas fa-dna xp icon"></i> XP:
+        <progress value="1200" max="2000"></progress> 1200 / 2000
       </div>
-
-      <div class="stat">
-        <i class="fas fa-dna icon xp"></i>
-        <span>XP:</span> <progress value="1200" max="2000"></progress> 1200 / 2000
+      <div class="stat"><i class="fas fa-heart-pulse health icon"></i> Health:
+        <progress value="80" max="100"></progress> 80%
       </div>
-
-      <div class="stat">
-        <i class="fas fa-heart icon health"></i>
-        <span>Health:</span> <progress value="80" max="100"></progress> 80%
-      </div>
-
-      <div class="stat">
-        <i class="fas fa-bolt icon energy"></i>
-        <span>Energy:</span> <progress value="50" max="100"></progress> 50%
+      <div class="stat"><i class="fas fa-bolt energy icon"></i> Energy:
+        <progress value="50" max="100"></progress> 50%
       </div>
     </section>
 
-    <!-- Action Grid -->
+    <!-- Game Navigation Grid -->
     <section class="action-grid">
-      <a href="missions.html" class="glass-button"><i class="fas fa-user-secret"></i> Missions</a>
-      <a href="shop.html" class="glass-button"><i class="fas fa-store"></i> Shop</a>
-      <a href="profile.html" class="glass-button"><i class="fas fa-user-cog"></i> Profile</a>
-      <a href="faction.html" class="glass-button"><i class="fas fa-users"></i> Factions</a>
-      <a href="leaderboard.html" class="glass-button"><i class="fas fa-trophy"></i> Leaderboard</a>
-      <a href="jail.html" class="glass-button"><i class="fas fa-gavel"></i> Jail</a>
+      <a href="missions.html" class="glass-button"><i class="fas fa-user-secret"></i><span>Missions</span></a>
+      <a href="shop.html" class="glass-button"><i class="fas fa-store"></i><span>Shop</span></a>
+      <a href="profile.html" class="glass-button"><i class="fas fa-user-cog"></i><span>Profile</span></a>
+      <a href="faction.html" class="glass-button"><i class="fas fa-users-gear"></i><span>Factions</span></a>
+      <a href="leaderboard.html" class="glass-button"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+      <a href="jail.html" class="glass-button"><i class="fas fa-gavel"></i><span>Jail</span></a>
     </section>
 
     <!-- Footer -->
@@ -65,7 +56,6 @@
     </footer>
   </div>
 
-  <!-- UI Logic -->
   <script src="js/ui.js"></script>
 </body>
 </html>
