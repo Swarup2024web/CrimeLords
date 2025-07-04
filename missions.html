@@ -14,43 +14,47 @@
     referrerpolicy="no-referrer"
   />
 
-  <!-- Custom CSS -->
+  <!-- Custom Styles -->
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <div class="container">
-    
+
     <!-- Header -->
     <header class="glass-header">
-      <a href="index.html" class="title-link"><h1>Crime Lords</h1></a>
-      <p class="tagline">Choose your mission. Rule the night.</p>
+      <a href="index.html" class="title-link">
+        <h1><i class="fas fa-skull-crossbones"></i> Crime Lords</h1>
+      </a>
+      <p class="tagline">Choose your mission. Earn respect. Build your empire.</p>
     </header>
 
-    <!-- Mission List -->
-    <section class="glass-box mission-list">
-      <h2><i class="fas fa-user-secret"></i> Available Missions</h2>
+    <!-- Missions List -->
+    <section class="glass-box">
+      <h2 style="margin-bottom: 20px;">
+        <i class="fas fa-user-secret"></i> Available Missions
+      </h2>
 
       <div class="mission-card" onclick="startMission('Heist at Nightclub')">
         <h3><i class="fas fa-mask"></i> Heist at Nightclub</h3>
-        <p>Steal hidden money from the VIP lounge. Risk: Medium</p>
+        <p>Steal hidden cash from the VIP lounge. <strong>Risk:</strong> Medium</p>
         <span class="reward">Reward: $1200 + 200 XP</span>
       </div>
 
-      <div class="mission-card" onclick="startMission('Hack the Security Grid')">
-        <h3><i class="fas fa-laptop-code"></i> Hack the Security Grid</h3>
-        <p>Take control of the city’s camera system. Risk: High</p>
+      <div class="mission-card" onclick="startMission('Hack the Grid')">
+        <h3><i class="fas fa-laptop-code"></i> Hack the Grid</h3>
+        <p>Disable citywide security cams. <strong>Risk:</strong> High</p>
         <span class="reward">Reward: $1800 + 300 XP</span>
       </div>
 
-      <div class="mission-card" onclick="startMission('Smuggle Illegal Weapons')">
-        <h3><i class="fas fa-truck-loading"></i> Smuggle Illegal Weapons</h3>
-        <p>Deliver weapons across town. Risk: Low</p>
+      <div class="mission-card" onclick="startMission('Smuggle Weapons')">
+        <h3><i class="fas fa-truck-fast"></i> Smuggle Weapons</h3>
+        <p>Transport illegal arms quietly. <strong>Risk:</strong> Low</p>
         <span class="reward">Reward: $800 + 100 XP</span>
       </div>
 
-      <div class="mission-card" onclick="startMission('Rescue the Informant')">
-        <h3><i class="fas fa-user-shield"></i> Rescue the Informant</h3>
-        <p>Save a gang spy from rival clutches. Risk: High</p>
+      <div class="mission-card" onclick="startMission('Rescue Informant')">
+        <h3><i class="fas fa-user-shield"></i> Rescue Informant</h3>
+        <p>Extract gang spy from enemy base. <strong>Risk:</strong> High</p>
         <span class="reward">Reward: $1500 + 250 XP</span>
       </div>
     </section>
@@ -61,7 +65,11 @@
     </footer>
   </div>
 
-  <!-- Script -->
-  <script src="js/missions.js"></script>
+  <!-- JS logic for mission start -->
+  <script>
+    function startMission(name) {
+      alert(`Mission Started: ${name}\n(We'll show full result popup later!)`);
+    }
+  </script>
 </body>
 </html>
