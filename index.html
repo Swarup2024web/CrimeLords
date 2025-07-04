@@ -4,41 +4,68 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Crime Lords - Dashboard</title>
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-yH4FDDf34rKH0FJ4U95XMHqDw3Y+z3qK6cK2tN7FtcJcm1QVG9gsv+IbKd1H0WrsjQJ1NDu9YFaOcHv2jFf+3A=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <!-- Custom Style -->
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <div class="container">
     
     <!-- Header -->
-    <header class="glass-card">
-      <h1>🕶️ Crime Lords</h1>
+    <header class="glass-header">
+      <a href="index.html" class="title-link"><h1>Crime Lords</h1></a>
       <p class="tagline">Rule the streets. Dominate the underworld.</p>
     </header>
 
-    <!-- Player Stats Panel -->
-    <section class="player-stats neumorphic">
-      <div class="stat">💰 Cash: <span>$5,000</span></div>
-      <div class="stat">🧬 XP: <span>1,200</span></div>
-      <div class="stat">❤️ Health: <span>80%</span></div>
-      <div class="stat">⚡ Energy: <span>50%</span></div>
+    <!-- Player Stats with Progress Bars -->
+    <section class="player-stats glass-box">
+      <div class="stat">
+        <i class="fas fa-money-bill-wave icon cash"></i>
+        <span>Cash:</span> $5,000
+      </div>
+
+      <div class="stat">
+        <i class="fas fa-dna icon xp"></i>
+        <span>XP:</span> <progress value="1200" max="2000"></progress> 1200 / 2000
+      </div>
+
+      <div class="stat">
+        <i class="fas fa-heart icon health"></i>
+        <span>Health:</span> <progress value="80" max="100"></progress> 80%
+      </div>
+
+      <div class="stat">
+        <i class="fas fa-bolt icon energy"></i>
+        <span>Energy:</span> <progress value="50" max="100"></progress> 50%
+      </div>
     </section>
 
     <!-- Action Grid -->
     <section class="action-grid">
-      <div class="card skeuo" onclick="goTo('missions.html')">🕵️‍♂️ Missions</div>
-      <div class="card skeuo" onclick="goTo('shop.html')">🛒 Shop</div>
-      <div class="card skeuo" onclick="goTo('profile.html')">🧑 Profile</div>
-      <div class="card skeuo" onclick="goTo('faction.html')">🧠 Factions</div>
-      <div class="card skeuo" onclick="goTo('leaderboard.html')">🏆 Leaderboard</div>
-      <div class="card skeuo" onclick="goTo('jail.html')">🚔 Jail</div>
+      <a href="missions.html" class="glass-button"><i class="fas fa-user-secret"></i> Missions</a>
+      <a href="shop.html" class="glass-button"><i class="fas fa-store"></i> Shop</a>
+      <a href="profile.html" class="glass-button"><i class="fas fa-user-cog"></i> Profile</a>
+      <a href="faction.html" class="glass-button"><i class="fas fa-users"></i> Factions</a>
+      <a href="leaderboard.html" class="glass-button"><i class="fas fa-trophy"></i> Leaderboard</a>
+      <a href="jail.html" class="glass-button"><i class="fas fa-gavel"></i> Jail</a>
     </section>
 
     <!-- Footer -->
-    <footer class="glass-card">
+    <footer class="glass-footer">
       <p>&copy; 2025 Crime Lords by Swarup</p>
     </footer>
   </div>
 
+  <!-- UI Logic -->
   <script src="js/ui.js"></script>
 </body>
-    </html>
+</html>
