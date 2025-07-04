@@ -251,3 +251,43 @@ progress::-webkit-progress-value {
   margin-right: 10px;
   margin-bottom: 10px;
   }
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.shop-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.shop-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+}
+
+.shop-item h3 {
+  color: #00ffe5;
+  margin: 10px 0 5px;
+  font-size: 1.2rem;
+}
+
+.shop-item p {
+  color: #ccc;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.shop-item .price {
+  display: block;
+  color: #aaff99;
+  font-weight: bold;
+  margin-bottom: 10px;
+  }
