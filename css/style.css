@@ -291,3 +291,51 @@ progress::-webkit-progress-value {
   font-weight: bold;
   margin-bottom: 10px;
   }
+
+.faction-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.faction-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 15px;
+  padding: 18px;
+  text-align: center;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.faction-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+}
+
+.faction-card h3 {
+  color: #00ffe5;
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+}
+
+.faction-card p {
+  color: #ccc;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+
+.faction-input {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #1a1a1a;
+  border: 1px solid #00ffe5;
+  color: #fff;
+  margin: 10px 0 15px;
+  font-size: 1rem;
+  outline: none;
+}
