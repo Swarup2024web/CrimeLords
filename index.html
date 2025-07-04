@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crime Lords - Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Header -->
+    <header class="glass-card">
+      <h1>🕶️ Crime Lords</h1>
+      <p class="tagline">Rule the streets. Dominate the underworld.</p>
+    </header>
+
+    <!-- Player Stats Panel -->
+    <section class="player-stats neumorphic">
+      <div class="stat">💰 Cash: <span>$5,000</span></div>
+      <div class="stat">🧬 XP: <span>1,200</span></div>
+      <div class="stat">❤️ Health: <span>80%</span></div>
+      <div class="stat">⚡ Energy: <span>50%</span></div>
+    </section>
+
+    <!-- Action Grid -->
+    <section class="action-grid">
+      <div class="card skeuo" onclick="goTo('missions.html')">🕵️‍♂️ Missions</div>
+      <div class="card skeuo" onclick="goTo('shop.html')">🛒 Shop</div>
+      <div class="card skeuo" onclick="goTo('profile.html')">🧑 Profile</div>
+      <div class="card skeuo" onclick="goTo('faction.html')">🧠 Factions</div>
+      <div class="card skeuo" onclick="goTo('leaderboard.html')">🏆 Leaderboard</div>
+      <div class="card skeuo" onclick="goTo('jail.html')">🚔 Jail</div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="glass-card">
+      <p>&copy; 2025 Crime Lords by Swarup</p>
+    </footer>
+  </div>
+
+  <script src="js/ui.js"></script>
+</body>
+    </html>
