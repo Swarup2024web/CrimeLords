@@ -10,7 +10,7 @@
 <body>
   <div class="container glassmorphic">
 
-    <!-- Header with nav will be loaded -->
+    <!-- Header + Navbar -->
     <div id="header-placeholder"></div>
 
     <section class="factions">
@@ -29,14 +29,14 @@
       </div>
 
       <div class="faction-box" id="factionStatus">
-        <!-- Will show current faction info -->
+        <!-- Faction status will appear here -->
       </div>
     </section>
   </div>
 
   <script src="script.js"></script>
   <script>
-    // Load header and activate nav
+    // Load header and highlight current page
     fetch("header.html")
       .then(res => res.text())
       .then(data => {
@@ -49,30 +49,30 @@
         });
       });
 
-    // Faction management using localStorage
+    // Faction logic
     function createFaction() {
       const name = document.getElementById("newFactionName").value.trim();
-      if (name === "") return alert("Enter a faction name.");
+      if (!name) return alert("Enter a valid faction name.");
       localStorage.setItem("faction", name);
       updateFactionStatus();
-      alert("Faction created successfully!");
+      alert(`Faction "${name}" created!`);
     }
 
     function joinFaction() {
       const name = document.getElementById("joinFactionName").value.trim();
-      if (name === "") return alert("Enter a faction name.");
+      if (!name) return alert("Enter a faction name to join.");
       localStorage.setItem("faction", name);
       updateFactionStatus();
-      alert("You joined the faction!");
+      alert(`You joined the faction "${name}".`);
     }
 
     function updateFactionStatus() {
       const faction = localStorage.getItem("faction");
-      const box = document.getElementById("factionStatus");
+      const status = document.getElementById("factionStatus");
       if (faction) {
-        box.innerHTML = `<p><strong>You belong to:</strong> ${faction}</p>`;
+        status.innerHTML = `<p><strong>Current Faction:</strong> ${faction}</p>`;
       } else {
-        box.innerHTML = `<p><em>You're not in any faction.</em></p>`;
+        status.innerHTML = `<p><em>You're not in any faction yet.</em></p>`;
       }
     }
 
