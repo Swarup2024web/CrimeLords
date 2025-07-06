@@ -10,72 +10,80 @@
 <body>
   <div class="container glassmorphic">
 
+    <!-- Header + Navbar -->
     <div id="header-placeholder"></div>
 
-    <section class="profile">
-      <h2><i class="fa-solid fa-user"></i> Profile</h2>
+    <section class="profile-section">
+      <h2><i class="fa-solid fa-user-secret"></i> Your Profile</h2>
 
-      <div class="profile-box">
-        <label>Player Name:</label>
-        <input type="text" id="player-name" placeholder="Enter your name">
-        <button onclick="saveName()">Save</button>
+      <div class="profile-card">
+        <img src="https://i.ibb.co/hKL4BNC/avatar.png" alt="Avatar" class="profile-avatar"/>
+
+        <div class="profile-info">
+          <p><strong>Name:</strong> <span id="playerName">Unknown</span></p>
+          <p><strong>Level:</strong> <span id="playerLevel">1</span></p>
+          <p><strong>Rank:</strong> <span id="playerRank">Rookie</span></p>
+          <p><strong>XP:</strong> <span id="xp">0</span></p>
+          <p><strong>Cash:</strong> $<span id="cash">100</span></p>
+          <p><strong>Health:</strong> <span id="health-val">100</span>/100</p>
+          <p><strong>Energy:</strong> <span id="energy-val">100</span>/100</p>
+        </div>
       </div>
 
-      <div class="profile-box">
-        <p><strong>Faction:</strong> <span id="faction-name">None</span></p>
-        <p><strong>XP:</strong> <span id="xp">0</span></p>
-        <p><strong>Cash:</strong> $<span id="cash">0</span></p>
-      </div>
-
-      <div class="profile-box">
-        <p><strong>Health:</strong> <span id="health-val">0</span>/100</p>
-        <div class="bar"><div class="bar-fill" id="health-bar"></div></div>
-
-        <p><strong>Energy:</strong> <span id="energy-val">0</span>/100</p>
-        <div class="bar"><div class="bar-fill energy" id="energy-bar"></div></div>
+      <div class="edit-box">
+        <input type="text" id="newName" placeholder="Enter new name"/>
+        <button onclick="updateName()">Update Name</button>
       </div>
     </section>
-
-    <div id="navbar-placeholder"></div>
   </div>
 
   <script src="script.js"></script>
-
   <script>
-    function loadProfile() {
-      document.getElementById("player-name").value = localStorage.getItem("playerName") || "";
-      document.getElementById("faction-name").textContent = localStorage.getItem("currentFaction") || "None";
-
-      document.getElementById("xp").textContent = localStorage.getItem("xp") || "0";
-      document.getElementById("cash").textContent = localStorage.getItem("cash") || "0";
-      document.getElementById("health-val").textContent = localStorage.getItem("health") || "0";
-      document.getElementById("energy-val").textContent = localStorage.getItem("energy") || "0";
-
-      document.getElementById("health-bar").style.width = `${localStorage.getItem("health") || 0}%`;
-      document.getElementById("energy-bar").style.width = `${localStorage.getItem("energy") || 0}%`;
-    }
-
-    function saveName() {
-      const name = document.getElementById("player-name").value.trim();
-      if (!name) return alert("Enter a valid name.");
-      localStorage.setItem("playerName", name);
-      alert("Name saved!");
-    }
-
-    loadProfile();
-
-    // Load header and navbar
     fetch("header.html")
       .then(res => res.text())
       .then(data => {
         document.getElementById("header-placeholder").innerHTML = data;
+        const currentPage = window.location.pathname.split("/").pop();
+        document.querySelectorAll("#nav-bar a").forEach(link => {
+          if (link.getAttribute("href") === currentPage) {
+            link.classList.add("active");
+          }
+        });
       });
 
-    fetch("navbar.html")
-      .then(res => res.text())
-      .then(data => {
-        document.getElementById("navbar-placeholder").innerHTML = data;
-      });
+    function updateProfileUI() {
+      const xp = parseInt(localStorage.getItem("xp")) || 0;
+      const cash = parseInt(localStorage.getItem("cash")) || 0;
+      const health = parseInt(localStorage.getItem("health")) || 100;
+      const energy = parseInt(localStorage.getItem("energy")) || 100;
+      const name = localStorage.getItem("playerName") || "Unknown";
+
+      // Level system
+      const level = Math.floor(xp / 100) + 1;
+      const rank = level < 5 ? "Rookie" :
+                   level < 10 ? "Soldier" :
+                   level < 20 ? "Enforcer" :
+                   level < 30 ? "Boss" : "Crime Lord";
+
+      document.getElementById("xp").textContent = xp;
+      document.getElementById("cash").textContent = cash;
+      document.getElementById("health-val").textContent = health;
+      document.getElementById("energy-val").textContent = energy;
+      document.getElementById("playerName").textContent = name;
+      document.getElementById("playerLevel").textContent = level;
+      document.getElementById("playerRank").textContent = rank;
+    }
+
+    function updateName() {
+      const newName = document.getElementById("newName").value.trim();
+      if (newName) {
+        localStorage.setItem("playerName", newName);
+        updateProfileUI();
+        alert("Name updated successfully!");
+      }
+    }
+
+    updateProfileUI();
   </script>
 </body>
 </html>
