@@ -14,17 +14,17 @@
     <div id="header-placeholder"></div>
 
     <section class="missions-section">
-      <h2><i class="fa-solid fa-list-check"></i> Available Missions</h2>
+      <h2><i class="fa-solid fa-bullseye"></i> Missions Center</h2>
 
-      <div class="mission-list" id="missionList">
-        <!-- JS Will Load Missions Here -->
-      </div>
+      <label for="missionSelect"><strong>Select Mission:</strong></label>
+      <select id="missionSelect" onchange="loadSubmissionUI()"></select>
+
+      <div id="submissionPanel" style="margin-top: 20px;"></div>
     </section>
   </div>
 
   <script src="script.js"></script>
   <script>
-    // Load Header
     fetch("header.html")
       .then(res => res.text())
       .then(data => {
@@ -38,82 +38,87 @@
       });
 
     const missions = [
-      {
-        title: "Street Snatch",
-        story: "Snatch a gold chain from a rival on the street.",
-        energy: 10,
-        rewardCash: 100,
-        rewardXP: 20
-      },
-      {
-        title: "Pickpocket Elite",
-        story: "Lift a wallet from a cop at the train station.",
-        energy: 15,
-        rewardCash: 150,
-        rewardXP: 30
-      },
-      {
-        title: "Alley Fight",
-        story: "Defeat two gang members in a back alley.",
-        energy: 20,
-        rewardCash: 200,
-        rewardXP: 40
-      },
-      {
-        title: "Carjack Escape",
-        story: "Steal a getaway car under heavy watch.",
-        energy: 25,
-        rewardCash: 300,
-        rewardXP: 60
-      },
-      {
-        title: "Underground Deal",
-        story: "Smuggle rare goods through the sewer system.",
-        energy: 30,
-        rewardCash: 400,
-        rewardXP: 80
-      }
+      "Street Snatch",
+      "Pickpocket Elite",
+      "Alley Fight",
+      "Carjack Escape",
+      "Underground Deal",
+      "Warehouse Robbery",
+      "Secret Trade",
+      "Gang Ambush",
+      "Escape Chase",
+      "Master Heist"
     ];
 
-    function loadMissions() {
-      const list = document.getElementById("missionList");
-      const completed = JSON.parse(localStorage.getItem("completedMissions") || "[]");
+    const baseRewards = {
+      energy: 10,
+      xp: 20,
+      cash: 50
+    };
 
-      missions.forEach((m, index) => {
-        const isUnlocked = index === 0 || completed.includes(index - 1);
-        const isCompleted = completed.includes(index);
+    function isMissionUnlocked(mIndex) {
+      const progress = JSON.parse(localStorage.getItem("missionProgress") || "{}");
+      if (mIndex === 0) return true;
+      const prev = progress["mission" + (mIndex - 1)];
+      return prev && prev >= 10;
+    }
 
-        const div = document.createElement("div");
-        div.className = "mission-card";
-        if (!isUnlocked) div.classList.add("locked");
+    function loadMissionDropdown() {
+      const dropdown = document.getElementById("missionSelect");
+      dropdown.innerHTML = "";
 
-        div.innerHTML = `
-          <h3>${m.title} ${isCompleted ? '<span class="badge done">✓ Completed</span>' : ''}</h3>
-          <p>${m.story}</p>
-          <p><strong>Energy:</strong> ⚡ ${m.energy} | 💵 $${m.rewardCash} | 💠 ${m.rewardXP} XP</p>
-          ${isUnlocked && !isCompleted ? `<button onclick="doMission(${index})">Start Mission</button>` : ''}
-          ${!isUnlocked ? `<p class="locked-text"><i class="fa-solid fa-lock"></i> Locked. Complete previous mission.</p>` : ''}
-        `;
-
-        list.appendChild(div);
+      missions.forEach((name, i) => {
+        const option = document.createElement("option");
+        option.value = i;
+        option.textContent = isMissionUnlocked(i) ? `${name}` : `${name} 🔒 Locked`;
+        option.disabled = !isMissionUnlocked(i);
+        dropdown.appendChild(option);
       });
     }
 
-    function doMission(index) {
-      const m = missions[index];
-      const completed = JSON.parse(localStorage.getItem("completedMissions") || "[]");
+    function loadSubmissionUI() {
+      const mIndex = parseInt(document.getElementById("missionSelect").value);
+      const progress = JSON.parse(localStorage.getItem("missionProgress") || "{}");
+      const completedSub = progress["mission" + mIndex] || 0;
 
-      if (!useEnergy(m.energy)) return;
-
-      addXP(m.rewardXP);
-      addCash(m.rewardCash);
-      completed.push(index);
-      localStorage.setItem("completedMissions", JSON.stringify(completed));
-      alert(`✅ ${m.title} completed!\n+${m.rewardXP} XP\n+$${m.rewardCash}`);
-      location.reload(); // refresh to unlock next
+      const panel = document.getElementById("submissionPanel");
+      panel.innerHTML = `
+        <h3>${missions[mIndex]}</h3>
+        <p>Progress: ${completedSub}/10 submissions (${completedSub * 10}%)</p>
+        ${completedSub < 10 ? `
+          <button onclick="doSubmission(${mIndex})">
+            Complete Next Submission (${(completedSub + 1) * 10}%)
+          </button>
+        ` : `<p><strong>✅ Mission Fully Completed!</strong></p>`}
+      `;
     }
 
-    loadMissions();
+    function doSubmission(mIndex) {
+      const progress = JSON.parse(localStorage.getItem("missionProgress") || "{}");
+      const completedSub = progress["mission" + mIndex] || 0;
+
+      if (completedSub >= 10) return;
+
+      const energyNeeded = baseRewards.energy + mIndex * 2;
+      const xpReward = baseRewards.xp + mIndex * 5;
+      const cashReward = baseRewards.cash + mIndex * 20;
+
+      if (!useEnergy(energyNeeded)) return;
+
+      addXP(xpReward);
+      addCash(cashReward);
+
+      progress["mission" + mIndex] = completedSub + 1;
+      localStorage.setItem("missionProgress", JSON.stringify(progress));
+
+      alert(`✅ Submission ${completedSub + 1} Completed\n+${xpReward} XP\n+$${cashReward}`);
+      loadMissionDropdown();
+      loadSubmissionUI();
+    }
+
+    // Initial Load
+    loadMissionDropdown();
+    loadSubmissionUI();
   </script>
 </body>
 </html>
