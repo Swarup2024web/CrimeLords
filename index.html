@@ -3,45 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CrimeLords</title>
+  <title>Crime Lords</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
   <div class="container glassmorphic">
-    <header class="header">
-      <h1><i class="fa-solid fa-mask"></i> CrimeLords</h1>
-    </header>
+
+    <div id="header-placeholder"></div>
 
     <section class="stats">
-      <div class="stat">
-        <i class="fa-solid fa-dollar-sign"></i> Cash: $<span id="cash">100</span>
+      <div class="stat"><i class="fa-solid fa-dna"></i> XP: <span id="xp">0</span></div>
+      <div class="stat"><i class="fa-solid fa-sack-dollar"></i> Cash: $<span id="cash">100</span></div>
+
+      <div class="stat stat-bar">
+        <label><i class="fa-solid fa-heart-pulse"></i> Health: <span id="health-val">100</span>/100</label>
+        <div class="bar"><div class="bar-fill" id="health-bar"></div></div>
       </div>
-      <div class="stat">
-        <i class="fa-solid fa-star"></i> XP: <span id="xp">0</span>
-      </div>
-      <div class="stat-bar">
-        <label><i class="fa-solid fa-heart"></i> Health</label>
-        <div class="bar"><div id="health-bar" class="bar-fill"></div></div>
-        <span id="health-val">100</span>/100
-      </div>
-      <div class="stat-bar">
-        <label><i class="fa-solid fa-bolt"></i> Energy</label>
-        <div class="bar"><div id="energy-bar" class="bar-fill energy"></div></div>
-        <span id="energy-val">50</span>/100
+
+      <div class="stat stat-bar">
+        <label><i class="fa-solid fa-bolt"></i> Energy: <span id="energy-val">100</span>/100</label>
+        <div class="bar"><div class="bar-fill energy" id="energy-bar"></div></div>
       </div>
     </section>
 
-    <nav class="menu">
-      <a href="missions.html"><i class="fa-solid fa-gun"></i> Missions</a>
-      <a href="shop.html"><i class="fa-solid fa-store"></i> Shop</a>
-      <a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a>
-      <a href="faction.html"><i class="fa-solid fa-people-group"></i> Factions</a>
-      <a href="#"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
-      <a href="#"><i class="fa-solid fa-lock"></i> Jail</a>
-    </nav>
+    <div id="navbar-placeholder"></div>
   </div>
 
   <script src="script.js"></script>
+
+  <script>
+    fetch("header.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
+      });
+
+    fetch("navbar.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("navbar-placeholder").innerHTML = data;
+      });
+  </script>
 </body>
 </html>
