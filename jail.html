@@ -10,7 +10,7 @@
 <body>
   <div class="container glassmorphic">
 
-    <!-- Header with nav -->
+    <!-- Header + Navbar -->
     <div id="header-placeholder"></div>
 
     <section class="jail-section">
@@ -20,18 +20,21 @@
         <p id="jail-message">Checking your criminal status...</p>
       </div>
 
-      <button onclick="simulateArrest()">👮 Simulate Arrest</button>
+      <div class="jail-actions">
+        <button onclick="simulateRandomArrest()">🚓 Get into Trouble</button>
+        <button onclick="bailOut()">💰 Bail Out ($250)</button>
+        <button onclick="attemptEscape()">🎲 Attempt Escape</button>
+      </div>
     </section>
   </div>
 
   <script src="script.js"></script>
   <script>
-    // Load header and navbar
+    // Load header + nav
     fetch("header.html")
       .then(res => res.text())
       .then(data => {
         document.getElementById("header-placeholder").innerHTML = data;
-
         const currentPage = window.location.pathname.split("/").pop();
         document.querySelectorAll("#nav-bar a").forEach(link => {
           if (link.getAttribute("href") === currentPage) {
@@ -40,11 +43,57 @@
         });
       });
 
-    // Jail logic
-    function simulateArrest() {
-      const releaseTime = Date.now() + 30000; // 30 seconds from now
-      localStorage.setItem("jailReleaseTime", releaseTime);
-      checkJailStatus();
+    // Surprise jail: 30 seconds
+    const jailTime = 30000;
+
+    function simulateRandomArrest() {
+      const chance = Math.random();
+      if (chance < 0.4) {
+        const releaseTime = Date.now() + jailTime;
+        localStorage.setItem("jailReleaseTime", releaseTime);
+        checkJailStatus();
+        alert("🚨 You've been arrested!");
+      } else {
+        alert("😎 You slipped away undetected!");
+      }
+    }
+
+    function bailOut() {
+      const releaseTime = parseInt(localStorage.getItem("jailReleaseTime") || 0);
+      if (!releaseTime || Date.now() >= releaseTime) {
+        alert("You're already free.");
+        return;
+      }
+
+      let cash = parseInt(localStorage.getItem("cash")) || 0;
+      if (cash >= 250) {
+        cash -= 250;
+        localStorage.setItem("cash", cash);
+        localStorage.removeItem("jailReleaseTime");
+        updateStats();
+        checkJailStatus();
+        alert("💸 You bailed out!");
+      } else {
+        alert("Not enough cash to bail out.");
+      }
+    }
+
+    function attemptEscape() {
+      const releaseTime = parseInt(localStorage.getItem("jailReleaseTime") || 0);
+      if (!releaseTime || Date.now() >= releaseTime) {
+        alert("You're already free.");
+        return;
+      }
+
+      const escapeChance = Math.random();
+      if (escapeChance < 0.3) {
+        localStorage.removeItem("jailReleaseTime");
+        updateStats();
+        checkJailStatus();
+        alert("🕶️ You escaped successfully!");
+      } else {
+        alert("🚫 Escape failed! Guards are watching you.");
+      }
     }
 
     function checkJailStatus() {
@@ -52,7 +101,7 @@
       const releaseTime = parseInt(localStorage.getItem("jailReleaseTime") || "0");
 
       if (!releaseTime || Date.now() >= releaseTime) {
-        jailBox.innerHTML = "✅ You're free. Stay out of trouble.";
+        jailBox.innerHTML = "✅ You're free. Live clean, or don’t.";
         localStorage.removeItem("jailReleaseTime");
       } else {
         const remaining = Math.ceil((releaseTime - Date.now()) / 1000);
