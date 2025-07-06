@@ -1,4 +1,4 @@
-/* General Reset */
+/* ======= Global Reset & Fonts ======= */
 * {
   margin: 0;
   padding: 0;
@@ -6,164 +6,172 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
-/* Body Background */
 body {
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
   color: #fff;
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: start;
   padding: 20px;
 }
 
-/* Container */
 .container {
+  max-width: 600px;
   width: 100%;
-  max-width: 500px;
-  padding: 20px;
   border-radius: 20px;
-  backdrop-filter: blur(15px);
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+  padding: 20px;
+  box-shadow: 0 0 25px rgba(0, 255, 200, 0.1);
 }
 
-/* Header */
-.header {
+/* ======= Glassmorphism Card ======= */
+.glassmorphic {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 8px 8px 16px #0c0c0c, -8px -8px 16px #2a2a2a;
+}
+
+/* ======= Header ======= */
+header {
   text-align: center;
   margin-bottom: 20px;
 }
 
-.header h1 {
-  font-size: 28px;
-  font-weight: bold;
+header h1 {
+  font-size: 2.2rem;
   color: #00ffc3;
   text-shadow: 0 0 10px #00ffc3;
 }
 
-/* Stats Section */
+/* ======= Stats Section ======= */
 .stats {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 15px;
 }
 
 .stat {
-  background: #1b1b1b;
-  padding: 12px;
-  border-radius: 15px;
-  box-shadow: inset 5px 5px 10px #111, inset -5px -5px 10px #2a2a2a;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  background: #1c1c1c;
+  padding: 10px 15px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  box-shadow: inset 4px 4px 8px #0f0f0f, inset -4px -4px 8px #2e2e2e;
 }
 
-/* Progress Bars */
 .stat-bar {
-  font-size: 14px;
+  font-size: 0.95rem;
 }
 
-.stat-bar label {
-  display: block;
-  margin-bottom: 4px;
-}
-
+/* ======= Progress Bars ======= */
 .bar {
   width: 100%;
   height: 18px;
   background: #111;
-  border-radius: 20px;
+  border-radius: 10px;
   overflow: hidden;
-  margin-bottom: 4px;
-  box-shadow: inset 2px 2px 5px #000, inset -2px -2px 5px #333;
+  margin-top: 5px;
 }
 
 .bar-fill {
   height: 100%;
-  width: 100%;
-  transition: width 0.5s ease;
-  background: linear-gradient(90deg, #ff4d4d, #ff0080);
-  box-shadow: 0 0 10px #ff4d4d;
+  background: linear-gradient(90deg, #ff3e3e, #ff7676);
+  width: 0%;
+  transition: width 0.3s ease;
+  border-radius: 10px;
 }
 
 .bar-fill.energy {
-  background: linear-gradient(90deg, #00eaff, #00ffc3);
-  box-shadow: 0 0 10px #00ffc3;
+  background: linear-gradient(90deg, #00ffc3, #00aaff);
 }
 
-/* Navigation Menu */
-.menu {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
+/* ======= Buttons ======= */
+button {
+  padding: 10px 15px;
+  background: #00ffc3;
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
-.menu a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px;
-  background: #1f1f1f;
-  color: #fff;
-  border-radius: 15px;
-  text-decoration: none;
-  font-size: 16px;
-  gap: 8px;
-  box-shadow: 5px 5px 15px #0a0a0a, -5px -5px 15px #2a2a2a;
-  transition: 0.3s ease;
+button:hover {
+  background: #00e0b0;
 }
 
-.menu a:hover {
-  background: #292929;
-  transform: scale(1.05);
-  color: #00ffc3;
-  text-shadow: 0 0 5px #00ffc3;
+/* ======= Mission, Faction, Profile, Jail, Shop Styles ======= */
+section {
+  margin-top: 20px;
 }
 
-/* Missions Page */
-.missions {
+.task-list,
+.factions,
+.profile,
+.jail-section,
+.shop {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
 }
 
-select {
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  background: #222;
-  color: #fff;
-  font-size: 16px;
-  box-shadow: inset 2px 2px 6px #111, inset -2px -2px 6px #2a2a2a;
-}
-
-/* Task Buttons */
 .task-btn {
-  display: block;
-  width: 100%;
   padding: 10px;
-  margin-bottom: 8px;
-  border: none;
-  border-radius: 10px;
-  background: #141414;
+  background: #2a2a2a;
   color: #fff;
-  font-size: 15px;
-  text-align: left;
-  box-shadow: 3px 3px 6px #0a0a0a, -3px -3px 6px #222;
-  transition: all 0.3s ease;
+  border: 1px solid #00ffc3;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s ease;
 }
 
 .task-btn:hover {
-  background: #222;
-  transform: scale(1.01);
-  color: #00ffc3;
-  cursor: pointer;
+  background: #00ffc3;
+  color: #000;
 }
 
-.task-btn:disabled {
-  background: #333;
-  color: #888;
-  cursor: not-allowed;
+.faction-box,
+.profile-box,
+.jail-box,
+.shop-item,
+.stat-box {
+  background: #1c1c1c;
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: inset 4px 4px 8px #0f0f0f, inset -4px -4px 8px #2e2e2e;
 }
+
+.faction-box input,
+.profile-box input,
+.faction-box select,
+.shop-item select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  background: #111;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+}
+
+/* ======= Navbar Placeholder (Handled via navbar.html) ======= */
+#navbar-placeholder {
+  margin-top: 30px;
+}
+
+/* ======= Responsive ======= */
+@media (max-width: 600px) {
+  .container {
+    padding: 15px;
+  }
+
+  header h1 {
+    font-size: 1.6rem;
+  }
+
+  button {
+    font-size: 0.9rem;
+  }
+  }
