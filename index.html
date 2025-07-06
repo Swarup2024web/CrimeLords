@@ -3,59 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Crime Lords - Dashboard</title>
-
-  <!-- Font Awesome Icons -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    integrity="sha512-yH4FDDf34rKH0FJ4U95XMHqDw3Y+z3qK6cK2tN7FtcJcm1QVG9gsv+IbKd1H0WrsjQJ1NDu9YFaOcHv2jFf+3A=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
-
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="css/style.css" />
+  <title>CrimeLords</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-
-    <!-- Header -->
-    <header class="glass-header">
-      <a href="index.html" class="title-link"><h1><i class="fas fa-skull-crossbones"></i> Crime Lords</h1></a>
-      <p class="tagline">Rule the streets. Dominate the underworld.</p>
+  <div class="container glassmorphic">
+    <header class="header">
+      <h1><i class="fa-solid fa-mask"></i> CrimeLords</h1>
     </header>
 
-    <!-- Player Stats Panel -->
-    <section class="player-stats glass-box">
-      <div class="stat"><i class="fas fa-money-bill-wave cash icon"></i> Cash: $5,000</div>
-      <div class="stat"><i class="fas fa-dna xp icon"></i> XP:
-        <progress value="1200" max="2000"></progress> 1200 / 2000
+    <section class="stats">
+      <div class="stat">
+        <i class="fa-solid fa-dollar-sign"></i> Cash: $<span id="cash">100</span>
       </div>
-      <div class="stat"><i class="fas fa-heart-pulse health icon"></i> Health:
-        <progress value="80" max="100"></progress> 80%
+      <div class="stat">
+        <i class="fa-solid fa-star"></i> XP: <span id="xp">0</span>
       </div>
-      <div class="stat"><i class="fas fa-bolt energy icon"></i> Energy:
-        <progress value="50" max="100"></progress> 50%
+      <div class="stat-bar">
+        <label><i class="fa-solid fa-heart"></i> Health</label>
+        <div class="bar"><div id="health-bar" class="bar-fill"></div></div>
+        <span id="health-val">100</span>/100
+      </div>
+      <div class="stat-bar">
+        <label><i class="fa-solid fa-bolt"></i> Energy</label>
+        <div class="bar"><div id="energy-bar" class="bar-fill energy"></div></div>
+        <span id="energy-val">50</span>/100
       </div>
     </section>
 
-    <!-- Game Navigation Grid -->
-    <section class="action-grid">
-      <a href="missions.html" class="glass-button"><i class="fas fa-user-secret"></i><span>Missions</span></a>
-      <a href="shop.html" class="glass-button"><i class="fas fa-store"></i><span>Shop</span></a>
-      <a href="profile.html" class="glass-button"><i class="fas fa-user-cog"></i><span>Profile</span></a>
-      <a href="faction.html" class="glass-button"><i class="fas fa-users-gear"></i><span>Factions</span></a>
-      <a href="leaderboard.html" class="glass-button"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
-      <a href="jail.html" class="glass-button"><i class="fas fa-gavel"></i><span>Jail</span></a>
-    </section>
-
-    <!-- Footer -->
-    <footer class="glass-footer">
-      <p>&copy; 2025 Crime Lords by Swarup</p>
-    </footer>
+    <nav class="menu">
+      <a href="missions.html"><i class="fa-solid fa-gun"></i> Missions</a>
+      <a href="shop.html"><i class="fa-solid fa-store"></i> Shop</a>
+      <a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a>
+      <a href="faction.html"><i class="fa-solid fa-people-group"></i> Factions</a>
+      <a href="#"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
+      <a href="#"><i class="fa-solid fa-lock"></i> Jail</a>
+    </nav>
   </div>
 
-  <script src="js/ui.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
