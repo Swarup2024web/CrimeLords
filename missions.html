@@ -3,73 +3,114 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Crime Lords - Missions</title>
-
-  <!-- Font Awesome -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    integrity="sha512-yH4FDDf34rKH0FJ4U95XMHqDw3Y+z3qK6cK2tN7FtcJcm1QVG9gsv+IbKd1H0WrsjQJ1NDu9YFaOcHv2jFf+3A=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
-
-  <!-- Custom Styles -->
-  <link rel="stylesheet" href="css/style.css" />
+  <title>Missions - CrimeLords</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-
-    <!-- Header -->
-    <header class="glass-header">
-      <a href="index.html" class="title-link">
-        <h1><i class="fas fa-skull-crossbones"></i> Crime Lords</h1>
-      </a>
-      <p class="tagline">Choose your mission. Earn respect. Build your empire.</p>
+  <div class="container glassmorphic">
+    <header class="header">
+      <h1><i class="fa-solid fa-gun"></i> Missions</h1>
     </header>
 
-    <!-- Missions List -->
-    <section class="glass-box">
-      <h2 style="margin-bottom: 20px;">
-        <i class="fas fa-user-secret"></i> Available Missions
-      </h2>
+    <section class="missions">
+      <label for="mission-select">Choose Mission:</label>
+      <select id="mission-select"></select>
 
-      <div class="mission-card" onclick="startMission('Heist at Nightclub')">
-        <h3><i class="fas fa-mask"></i> Heist at Nightclub</h3>
-        <p>Steal hidden cash from the VIP lounge. <strong>Risk:</strong> Medium</p>
-        <span class="reward">Reward: $1200 + 200 XP</span>
-      </div>
-
-      <div class="mission-card" onclick="startMission('Hack the Grid')">
-        <h3><i class="fas fa-laptop-code"></i> Hack the Grid</h3>
-        <p>Disable citywide security cams. <strong>Risk:</strong> High</p>
-        <span class="reward">Reward: $1800 + 300 XP</span>
-      </div>
-
-      <div class="mission-card" onclick="startMission('Smuggle Weapons')">
-        <h3><i class="fas fa-truck-fast"></i> Smuggle Weapons</h3>
-        <p>Transport illegal arms quietly. <strong>Risk:</strong> Low</p>
-        <span class="reward">Reward: $800 + 100 XP</span>
-      </div>
-
-      <div class="mission-card" onclick="startMission('Rescue Informant')">
-        <h3><i class="fas fa-user-shield"></i> Rescue Informant</h3>
-        <p>Extract gang spy from enemy base. <strong>Risk:</strong> High</p>
-        <span class="reward">Reward: $1500 + 250 XP</span>
-      </div>
+      <div id="tasks"></div>
     </section>
-
-    <!-- Footer -->
-    <footer class="glass-footer">
-      <p>&copy; 2025 Crime Lords by Swarup</p>
-    </footer>
   </div>
 
-  <!-- JS logic for mission start -->
   <script>
-    function startMission(name) {
-      alert(`Mission Started: ${name}\n(We'll show full result popup later!)`);
+    const missionsData = [];
+    const unlockedMissions = JSON.parse(localStorage.getItem('unlockedMissions')) || 1;
+    const cashElem = document.getElementById('cash');
+    const xpElem = document.getElementById('xp');
+
+    // Create 10 missions with 10 submissions each
+    for (let m = 1; m <= 10; m++) {
+      const mission = {
+        name: `Mission ${m}`,
+        unlocked: m <= unlockedMissions,
+        tasks: []
+      };
+      for (let t = 1; t <= 10; t++) {
+        mission.tasks.push({
+          id: t,
+          name: `Task ${t}`,
+          xp: m * 10 + t * 2,
+          cash: m * 20 + t * 5,
+          energy: 5 + t
+        });
+      }
+      missionsData.push(mission);
     }
+
+    const missionSelect = document.getElementById('mission-select');
+    const tasksDiv = document.getElementById('tasks');
+
+    // Populate dropdown
+    function populateDropdown() {
+      missionSelect.innerHTML = '';
+      missionsData.forEach((m, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = m.unlocked ? m.name : `${m.name} (Locked)`;
+        opt.disabled = !m.unlocked;
+        missionSelect.appendChild(opt);
+      });
+    }
+
+    function showTasks(index) {
+      const mission = missionsData[index];
+      if (!mission.unlocked) return;
+
+      tasksDiv.innerHTML = '';
+      mission.tasks.forEach(task => {
+        const btn = document.createElement('button');
+        btn.textContent = `${task.name} — XP: ${task.xp}, Cash: $${task.cash}, Energy: ${task.energy}`;
+        btn.className = 'task-btn';
+        btn.onclick = () => {
+          const currentEnergy = parseInt(localStorage.getItem('energy')) || 100;
+          if (currentEnergy < task.energy) {
+            alert("Not enough energy!");
+            return;
+          }
+
+          // Reduce energy
+          localStorage.setItem('energy', currentEnergy - task.energy);
+
+          // Add cash & XP
+          let cash = parseInt(localStorage.getItem('cash') || '100');
+          let xp = parseInt(localStorage.getItem('xp') || '0');
+          cash += task.cash;
+          xp += task.xp;
+          localStorage.setItem('cash', cash);
+          localStorage.setItem('xp', xp);
+
+          btn.disabled = true;
+          btn.textContent += ' ✅';
+
+          // If all tasks complete, unlock next mission
+          if ([...tasksDiv.querySelectorAll('button')].every(b => b.disabled)) {
+            if (index + 1 < missionsData.length && !missionsData[index + 1].unlocked) {
+              missionsData[index + 1].unlocked = true;
+              localStorage.setItem('unlockedMissions', index + 2);
+              alert(`${missionsData[index + 1].name} Unlocked!`);
+              populateDropdown();
+            }
+          }
+        };
+        tasksDiv.appendChild(btn);
+      });
+    }
+
+    // Initial setup
+    populateDropdown();
+    missionSelect.addEventListener('change', (e) => {
+      showTasks(parseInt(e.target.value));
+    });
+    showTasks(0); // Show Mission 1 by default
   </script>
 </body>
 </html>
