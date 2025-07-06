@@ -3,31 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Missions - CrimeLords</title>
+  <title>Missions - Crime Lords</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
   <div class="container glassmorphic">
-    <header class="header">
-      <h1><i class="fa-solid fa-gun"></i> Missions</h1>
-    </header>
+
+    <div id="header-placeholder"></div>
 
     <section class="missions">
-      <label for="mission-select">Choose Mission:</label>
+      <h2><i class="fa-solid fa-gun"></i> Missions</h2>
+
+      <label for="mission-select">Select a Mission:</label>
       <select id="mission-select"></select>
 
-      <div id="tasks"></div>
+      <div id="tasks" class="task-list"></div>
     </section>
+
+    <div id="navbar-placeholder"></div>
+
   </div>
+
+  <script src="script.js"></script>
 
   <script>
     const missionsData = [];
-    const unlockedMissions = JSON.parse(localStorage.getItem('unlockedMissions')) || 1;
-    const cashElem = document.getElementById('cash');
-    const xpElem = document.getElementById('xp');
+    const unlockedMissions = parseInt(localStorage.getItem("unlockedMissions")) || 1;
 
-    // Create 10 missions with 10 submissions each
     for (let m = 1; m <= 10; m++) {
       const mission = {
         name: `Mission ${m}`,
@@ -46,10 +49,9 @@
       missionsData.push(mission);
     }
 
-    const missionSelect = document.getElementById('mission-select');
-    const tasksDiv = document.getElementById('tasks');
+    const missionSelect = document.getElementById("mission-select");
+    const tasksDiv = document.getElementById("tasks");
 
-    // Populate dropdown
     function populateDropdown() {
       missionSelect.innerHTML = '';
       missionsData.forEach((m, i) => {
@@ -70,6 +72,13 @@
         const btn = document.createElement('button');
         btn.textContent = `${task.name} — XP: ${task.xp}, Cash: $${task.cash}, Energy: ${task.energy}`;
         btn.className = 'task-btn';
+
+        const taskKey = `mission${index}-task${task.id}`;
+        if (localStorage.getItem(taskKey)) {
+          btn.disabled = true;
+          btn.textContent += ' ✅';
+        }
+
         btn.onclick = () => {
           const currentEnergy = parseInt(localStorage.getItem('energy')) || 100;
           if (currentEnergy < task.energy) {
@@ -80,37 +89,52 @@
           // Reduce energy
           localStorage.setItem('energy', currentEnergy - task.energy);
 
-          // Add cash & XP
-          let cash = parseInt(localStorage.getItem('cash') || '100');
-          let xp = parseInt(localStorage.getItem('xp') || '0');
+          // Add XP and cash
+          let cash = parseInt(localStorage.getItem("cash") || "100");
+          let xp = parseInt(localStorage.getItem("xp") || "0");
           cash += task.cash;
           xp += task.xp;
-          localStorage.setItem('cash', cash);
-          localStorage.setItem('xp', xp);
+          localStorage.setItem("cash", cash);
+          localStorage.setItem("xp", xp);
 
+          // Mark task complete
+          localStorage.setItem(taskKey, "completed");
           btn.disabled = true;
-          btn.textContent += ' ✅';
+          btn.textContent += " ✅";
 
-          // If all tasks complete, unlock next mission
-          if ([...tasksDiv.querySelectorAll('button')].every(b => b.disabled)) {
-            if (index + 1 < missionsData.length && !missionsData[index + 1].unlocked) {
-              missionsData[index + 1].unlocked = true;
-              localStorage.setItem('unlockedMissions', index + 2);
-              alert(`${missionsData[index + 1].name} Unlocked!`);
-              populateDropdown();
-            }
+          // Check if all tasks are completed
+          const allCompleted = mission.tasks.every(t => localStorage.getItem(`mission${index}-task${t.id}`));
+          if (allCompleted && index + 1 < missionsData.length && !missionsData[index + 1].unlocked) {
+            missionsData[index + 1].unlocked = true;
+            localStorage.setItem("unlockedMissions", index + 2);
+            alert(`${missionsData[index + 1].name} is now unlocked!`);
+            populateDropdown();
           }
+
+          updateStats(); // update top stats
         };
+
         tasksDiv.appendChild(btn);
       });
     }
 
-    // Initial setup
+    // Load initial view
     populateDropdown();
-    missionSelect.addEventListener('change', (e) => {
-      showTasks(parseInt(e.target.value));
-    });
-    showTasks(0); // Show Mission 1 by default
+    showTasks(0);
+    missionSelect.addEventListener("change", e => showTasks(parseInt(e.target.value)));
+
+    // Load header and navbar
+    fetch("header.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
+      });
+
+    fetch("navbar.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("navbar-placeholder").innerHTML = data;
+      });
   </script>
 </body>
 </html>
