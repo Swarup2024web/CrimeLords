@@ -3,79 +3,103 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Crime Lords - Factions</title>
-
-  <!-- Font Awesome -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    integrity="sha512-yH4FDDf34rKH0FJ4U95XMHqDw3Y+z3qK6cK2tN7FtcJcm1QVG9gsv+IbKd1H0WrsjQJ1NDu9YFaOcHv2jFf+3A=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
-
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="css/style.css" />
+  <title>Factions - Crime Lords</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
+  <div class="container glassmorphic">
+    
+    <div id="header-placeholder"></div>
 
-    <!-- Header -->
-    <header class="glass-header">
-      <a href="index.html" class="title-link">
-        <h1><i class="fas fa-skull-crossbones"></i> Crime Lords</h1>
-      </a>
-      <p class="tagline">Unite. Battle. Control the city with your crew.</p>
-    </header>
+    <section class="factions">
+      <h2><i class="fa-solid fa-people-group"></i> Factions</h2>
 
-    <!-- Faction Section -->
-    <section class="glass-box">
-      <h2 style="margin-bottom: 20px;"><i class="fas fa-users-gear"></i> Join a Faction</h2>
-
-      <div class="faction-grid">
-
-        <!-- Faction 1 -->
-        <div class="faction-card">
-          <h3><i class="fas fa-ghost"></i> Shadow Syndicate</h3>
-          <p>Masters of stealth and cybercrime. Operate in total silence.</p>
-          <button class="glass-button">Join</button>
-        </div>
-
-        <!-- Faction 2 -->
-        <div class="faction-card">
-          <h3><i class="fas fa-fire-flame-curved"></i> Inferno Crew</h3>
-          <p>Explosive power. Ruthless in gang wars. Chaos is their tool.</p>
-          <button class="glass-button">Join</button>
-        </div>
-
-        <!-- Faction 3 -->
-        <div class="faction-card">
-          <h3><i class="fas fa-crown"></i> Kings of Concrete</h3>
-          <p>Control the streets with brute force and intimidation.</p>
-          <button class="glass-button">Join</button>
-        </div>
-
-        <!-- Faction 4 -->
-        <div class="faction-card">
-          <h3><i class="fas fa-code"></i> Neural Hackers</h3>
-          <p>Hackers with AI weapons. Digital warfare is their game.</p>
-          <button class="glass-button">Join</button>
-        </div>
-
+      <div class="faction-box">
+        <p><strong>Your Faction:</strong> <span id="current-faction">None</span></p>
       </div>
 
-      <!-- Create New Faction -->
-      <div style="margin-top: 30px;">
-        <h3 style="color: #00ccff;"><i class="fas fa-plus-circle"></i> Start Your Own Faction</h3>
-        <input type="text" placeholder="Faction Name" class="faction-input" />
-        <button class="glass-button"><i class="fas fa-check"></i> Create</button>
+      <div class="faction-box">
+        <h3>Create a New Faction</h3>
+        <input type="text" id="new-faction-name" placeholder="Enter faction name">
+        <button onclick="createFaction()">Create</button>
+      </div>
+
+      <div class="faction-box">
+        <h3>Join an Existing Faction</h3>
+        <select id="faction-list">
+          <option value="" disabled selected>Select a faction</option>
+        </select>
+        <button onclick="joinFaction()">Join</button>
       </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="glass-footer">
-      <p>&copy; 2025 Crime Lords by Swarup</p>
-    </footer>
+    <div id="navbar-placeholder"></div>
   </div>
+
+  <script src="script.js"></script>
+
+  <script>
+    // Load saved data or create empty
+    const factionList = JSON.parse(localStorage.getItem("factions")) || [];
+    const factionSelect = document.getElementById("faction-list");
+    const currentFaction = localStorage.getItem("currentFaction") || "None";
+    document.getElementById("current-faction").textContent = currentFaction;
+
+    function updateDropdown() {
+      factionSelect.innerHTML = '<option value="" disabled selected>Select a faction</option>';
+      factionList.forEach(name => {
+        const opt = document.createElement("option");
+        opt.value = name;
+        opt.textContent = name;
+        factionSelect.appendChild(opt);
+      });
+    }
+
+    function createFaction() {
+      const name = document.getElementById("new-faction-name").value.trim();
+      if (name === "") {
+        alert("Please enter a valid faction name.");
+        return;
+      }
+      if (factionList.includes(name)) {
+        alert("That faction already exists.");
+        return;
+      }
+      factionList.push(name);
+      localStorage.setItem("factions", JSON.stringify(factionList));
+      localStorage.setItem("currentFaction", name);
+      document.getElementById("current-faction").textContent = name;
+      updateDropdown();
+      alert(`Faction "${name}" created and joined!`);
+    }
+
+    function joinFaction() {
+      const selected = factionSelect.value;
+      if (!selected) {
+        alert("Please select a faction.");
+        return;
+      }
+      localStorage.setItem("currentFaction", selected);
+      document.getElementById("current-faction").textContent = selected;
+      alert(`You joined "${selected}"`);
+    }
+
+    // Load dropdown on page ready
+    updateDropdown();
+
+    // Load header and navbar
+    fetch("header.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
+      });
+
+    fetch("navbar.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("navbar-placeholder").innerHTML = data;
+      });
+  </script>
 </body>
 </html>
