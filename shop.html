@@ -3,80 +3,127 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Crime Lords - Shop</title>
-
-  <!-- Font Awesome -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    integrity="sha512-yH4FDDf34rKH0FJ4U95XMHqDw3Y+z3qK6cK2tN7FtcJcm1QVG9gsv+IbKd1H0WrsjQJ1NDu9YFaOcHv2jFf+3A=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
-
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="css/style.css" />
+  <title>Shop - Crime Lords</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
+  <div class="container glassmorphic">
 
-    <!-- Header -->
-    <header class="glass-header">
-      <a href="index.html" class="title-link">
-        <h1><i class="fas fa-skull-crossbones"></i> Crime Lords</h1>
-      </a>
-      <p class="tagline">Gear up. Rule harder. Welcome to the Black Market.</p>
-    </header>
+    <div id="header-placeholder"></div>
 
-    <!-- Shop Items -->
-    <section class="glass-box">
-      <h2 style="margin-bottom: 20px;"><i class="fas fa-store"></i> Item Shop</h2>
+    <section class="shop">
+      <h2><i class="fa-solid fa-store"></i> Shop</h2>
 
-      <div class="shop-grid">
+      <div class="shop-item">
+        <p><strong>Health Pack (50 HP)</strong></p>
+        <p>Price: $50</p>
+        <button onclick="purchaseHealth()">Buy</button>
+      </div>
 
-        <!-- Item 1 -->
-        <div class="shop-item">
-          <i class="fas fa-gun fa-2x"></i>
-          <h3>Silenced Pistol</h3>
-          <p>+20 Attack</p>
-          <span class="price">$1,200</span>
-          <button class="glass-button">Buy</button>
-        </div>
+      <div class="shop-item">
+        <p><strong>Energy Drink (50 Energy)</strong></p>
+        <p>Price: $30</p>
+        <button onclick="purchaseEnergy()">Buy</button>
+      </div>
 
-        <!-- Item 2 -->
-        <div class="shop-item">
-          <i class="fas fa-shield-alt fa-2x"></i>
-          <h3>Kevlar Vest</h3>
-          <p>+30 Defense</p>
-          <span class="price">$1,500</span>
-          <button class="glass-button">Buy</button>
-        </div>
+      <div class="shop-item">
+        <p><strong>Advanced Health Pack (100 HP)</strong></p>
+        <p>Price: $100</p>
+        <button onclick="purchaseAdvancedHealth()">Buy</button>
+      </div>
 
-        <!-- Item 3 -->
-        <div class="shop-item">
-          <i class="fas fa-bolt fa-2x"></i>
-          <h3>Energy Drink</h3>
-          <p>+25 Energy</p>
-          <span class="price">$400</span>
-          <button class="glass-button">Buy</button>
-        </div>
+      <div class="shop-item">
+        <p><strong>Advanced Energy Drink (100 Energy)</strong></p>
+        <p>Price: $60</p>
+        <button onclick="purchaseAdvancedEnergy()">Buy</button>
+      </div>
 
-        <!-- Item 4 -->
-        <div class="shop-item">
-          <i class="fas fa-kit-medical fa-2x"></i>
-          <h3>First Aid Kit</h3>
-          <p>+50 Health</p>
-          <span class="price">$600</span>
-          <button class="glass-button">Buy</button>
-        </div>
-
+      <div class="stat-box">
+        <p><strong>Your Cash:</strong> $<span id="cash">100</span></p>
       </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="glass-footer">
-      <p>&copy; 2025 Crime Lords by Swarup</p>
-    </footer>
+    <div id="navbar-placeholder"></div>
   </div>
+
+  <script src="script.js"></script>
+
+  <script>
+    function loadShop() {
+      document.getElementById("cash").textContent = localStorage.getItem("cash") || "100";
+    }
+
+    function purchaseHealth() {
+      let cash = parseInt(localStorage.getItem("cash") || "100");
+      if (cash < 50) {
+        alert("Not enough cash!");
+        return;
+      }
+      localStorage.setItem("cash", cash - 50);
+      let health = parseInt(localStorage.getItem("health") || "100");
+      health = Math.min(100, health + 50);
+      localStorage.setItem("health", health);
+      alert("Health Pack purchased!");
+      loadShop();
+    }
+
+    function purchaseEnergy() {
+      let cash = parseInt(localStorage.getItem("cash") || "100");
+      if (cash < 30) {
+        alert("Not enough cash!");
+        return;
+      }
+      localStorage.setItem("cash", cash - 30);
+      let energy = parseInt(localStorage.getItem("energy") || "100");
+      energy = Math.min(100, energy + 50);
+      localStorage.setItem("energy", energy);
+      alert("Energy Drink purchased!");
+      loadShop();
+    }
+
+    function purchaseAdvancedHealth() {
+      let cash = parseInt(localStorage.getItem("cash") || "100");
+      if (cash < 100) {
+        alert("Not enough cash!");
+        return;
+      }
+      localStorage.setItem("cash", cash - 100);
+      let health = parseInt(localStorage.getItem("health") || "100");
+      health = Math.min(100, health + 100);
+      localStorage.setItem("health", health);
+      alert("Advanced Health Pack purchased!");
+      loadShop();
+    }
+
+    function purchaseAdvancedEnergy() {
+      let cash = parseInt(localStorage.getItem("cash") || "100");
+      if (cash < 60) {
+        alert("Not enough cash!");
+        return;
+      }
+      localStorage.setItem("cash", cash - 60);
+      let energy = parseInt(localStorage.getItem("energy") || "100");
+      energy = Math.min(100, energy + 100);
+      localStorage.setItem("energy", energy);
+      alert("Advanced Energy Drink purchased!");
+      loadShop();
+    }
+
+    loadShop();
+
+    // Load header and navbar
+    fetch("header.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
+      });
+
+    fetch("navbar.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("navbar-placeholder").innerHTML = data;
+      });
+  </script>
 </body>
 </html>
