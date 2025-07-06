@@ -10,8 +10,10 @@
 <body>
   <div class="container glassmorphic">
 
+    <!-- Header will be loaded dynamically -->
     <div id="header-placeholder"></div>
 
+    <!-- Stats Section -->
     <section class="stats">
       <div class="stat"><i class="fa-solid fa-dna"></i> XP: <span id="xp">0</span></div>
       <div class="stat"><i class="fa-solid fa-sack-dollar"></i> Cash: $<span id="cash">100</span></div>
@@ -26,23 +28,24 @@
         <div class="bar"><div class="bar-fill energy" id="energy-bar"></div></div>
       </div>
     </section>
-
-    <div id="navbar-placeholder"></div>
   </div>
 
+  <!-- Scripts -->
   <script src="script.js"></script>
-
   <script>
     fetch("header.html")
       .then(res => res.text())
       .then(data => {
         document.getElementById("header-placeholder").innerHTML = data;
-      });
 
-    fetch("navbar.html")
-      .then(res => res.text())
-      .then(data => {
-        document.getElementById("navbar-placeholder").innerHTML = data;
+        // ✅ Highlight current page in navbar
+        const currentPage = window.location.pathname.split("/").pop();
+        const links = document.querySelectorAll("#nav-bar a");
+        links.forEach(link => {
+          if (link.getAttribute("href") === currentPage) {
+            link.classList.add("active");
+          }
+        });
       });
   </script>
 </body>
