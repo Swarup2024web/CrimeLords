@@ -10,120 +10,110 @@
 <body>
   <div class="container glassmorphic">
 
+    <!-- Header -->
     <div id="header-placeholder"></div>
 
-    <section class="shop">
-      <h2><i class="fa-solid fa-store"></i> Shop</h2>
+    <section class="shop-section">
+      <h2><i class="fa-solid fa-store"></i> Black Market Shop</h2>
 
-      <div class="shop-item">
-        <p><strong>Health Pack (50 HP)</strong></p>
-        <p>Price: $50</p>
-        <button onclick="purchaseHealth()">Buy</button>
+      <div class="shop-category">
+        <h3><i class="fa-solid fa-gun"></i> Weapons</h3>
+        <div class="item-grid" id="weapons"></div>
       </div>
 
-      <div class="shop-item">
-        <p><strong>Energy Drink (50 Energy)</strong></p>
-        <p>Price: $30</p>
-        <button onclick="purchaseEnergy()">Buy</button>
+      <div class="shop-category">
+        <h3><i class="fa-solid fa-shield-halved"></i> Armor</h3>
+        <div class="item-grid" id="armor"></div>
       </div>
 
-      <div class="shop-item">
-        <p><strong>Advanced Health Pack (100 HP)</strong></p>
-        <p>Price: $100</p>
-        <button onclick="purchaseAdvancedHealth()">Buy</button>
+      <div class="shop-category">
+        <h3><i class="fa-solid fa-bolt"></i> Boosters</h3>
+        <div class="item-grid" id="boosters"></div>
       </div>
 
-      <div class="shop-item">
-        <p><strong>Advanced Energy Drink (100 Energy)</strong></p>
-        <p>Price: $60</p>
-        <button onclick="purchaseAdvancedEnergy()">Buy</button>
-      </div>
-
-      <div class="stat-box">
-        <p><strong>Your Cash:</strong> $<span id="cash">100</span></p>
+      <div class="shop-category">
+        <h3><i class="fa-solid fa-toolbox"></i> Utilities</h3>
+        <div class="item-grid" id="utilities"></div>
       </div>
     </section>
-
-    <div id="navbar-placeholder"></div>
   </div>
 
   <script src="script.js"></script>
-
   <script>
-    function loadShop() {
-      document.getElementById("cash").textContent = localStorage.getItem("cash") || "100";
-    }
-
-    function purchaseHealth() {
-      let cash = parseInt(localStorage.getItem("cash") || "100");
-      if (cash < 50) {
-        alert("Not enough cash!");
-        return;
-      }
-      localStorage.setItem("cash", cash - 50);
-      let health = parseInt(localStorage.getItem("health") || "100");
-      health = Math.min(100, health + 50);
-      localStorage.setItem("health", health);
-      alert("Health Pack purchased!");
-      loadShop();
-    }
-
-    function purchaseEnergy() {
-      let cash = parseInt(localStorage.getItem("cash") || "100");
-      if (cash < 30) {
-        alert("Not enough cash!");
-        return;
-      }
-      localStorage.setItem("cash", cash - 30);
-      let energy = parseInt(localStorage.getItem("energy") || "100");
-      energy = Math.min(100, energy + 50);
-      localStorage.setItem("energy", energy);
-      alert("Energy Drink purchased!");
-      loadShop();
-    }
-
-    function purchaseAdvancedHealth() {
-      let cash = parseInt(localStorage.getItem("cash") || "100");
-      if (cash < 100) {
-        alert("Not enough cash!");
-        return;
-      }
-      localStorage.setItem("cash", cash - 100);
-      let health = parseInt(localStorage.getItem("health") || "100");
-      health = Math.min(100, health + 100);
-      localStorage.setItem("health", health);
-      alert("Advanced Health Pack purchased!");
-      loadShop();
-    }
-
-    function purchaseAdvancedEnergy() {
-      let cash = parseInt(localStorage.getItem("cash") || "100");
-      if (cash < 60) {
-        alert("Not enough cash!");
-        return;
-      }
-      localStorage.setItem("cash", cash - 60);
-      let energy = parseInt(localStorage.getItem("energy") || "100");
-      energy = Math.min(100, energy + 100);
-      localStorage.setItem("energy", energy);
-      alert("Advanced Energy Drink purchased!");
-      loadShop();
-    }
-
-    loadShop();
-
-    // Load header and navbar
     fetch("header.html")
       .then(res => res.text())
       .then(data => {
         document.getElementById("header-placeholder").innerHTML = data;
+        const currentPage = window.location.pathname.split("/").pop();
+        document.querySelectorAll("#nav-bar a").forEach(link => {
+          if (link.getAttribute("href") === currentPage) {
+            link.classList.add("active");
+          }
+        });
       });
 
-    fetch("navbar.html")
-      .then(res => res.text())
-      .then(data => {
-        document.getElementById("navbar-placeholder").innerHTML = data;
-      });
+    const shopItems = {
+      weapons: [
+        { name: "Pistol", cost: 150, desc: "Basic firearm. +5 power" },
+        { name: "Shotgun", cost: 300, desc: "Close-range beast. +15 power" },
+        { name: "SMG", cost: 600, desc: "Rapid fire. +25 power" }
+      ],
+      armor: [
+        { name: "Kevlar Vest", cost: 200, desc: "Basic body armor. +10 defense" },
+        { name: "Reinforced Coat", cost: 400, desc: "Improved body armor. +20 defense" },
+        { name: "Tactical Suit", cost: 800, desc: "Elite gear. +40 defense" }
+      ],
+      boosters: [
+        { name: "Energy Drink", cost: 100, desc: "+30 energy instantly" },
+        { name: "Med Kit", cost: 120, desc: "+40 health instantly" },
+        { name: "XP Capsule", cost: 250, desc: "+50 XP instantly" }
+      ],
+      utilities: [
+        { name: "Fake ID", cost: 350, desc: "Escape from jail once" },
+        { name: "Lockpick", cost: 200, desc: "Increases chance to escape jail" },
+        { name: "Burner Phone", cost: 150, desc: "Hides your location" }
+      ]
+    };
+
+    function loadShop() {
+      for (const category in shopItems) {
+        const container = document.getElementById(category);
+        shopItems[category].forEach(item => {
+          const card = document.createElement("div");
+          card.className = "item-card";
+          card.innerHTML = `
+            <h4>${item.name}</h4>
+            <p>${item.desc}</p>
+            <strong>$${item.cost}</strong><br>
+            <button onclick='buyItem("${category}", "${item.name}", ${item.cost})'>Buy</button>
+          `;
+          container.appendChild(card);
+        });
+      }
+    }
+
+    function buyItem(category, name, cost) {
+      let cash = parseInt(localStorage.getItem("cash")) || 0;
+      if (cash < cost) {
+        alert("❌ Not enough cash!");
+        return;
+      }
+
+      // Deduct cash
+      cash -= cost;
+      localStorage.setItem("cash", cash);
+      updateStats();
+
+      // Add to inventory
+      const key = "inventory_" + category;
+      let inventory = JSON.parse(localStorage.getItem(key)) || [];
+      inventory.push(name);
+      localStorage.setItem(key, JSON.stringify(inventory));
+
+      alert(`✅ You bought: ${name}`);
+    }
+
+    loadShop();
   </script>
 </body>
 </html>
