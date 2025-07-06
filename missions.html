@@ -9,23 +9,22 @@
 </head>
 <body>
   <div class="container glassmorphic">
-    <!-- Header + Navbar -->
+
+    <!-- Header -->
     <div id="header-placeholder"></div>
 
-    <section class="missions">
-      <h2><i class="fa-solid fa-gun"></i> Missions</h2>
+    <section class="missions-section">
+      <h2><i class="fa-solid fa-list-check"></i> Available Missions</h2>
 
-      <!-- Mission Dropdown -->
-      <select id="missionSelect" onchange="loadMission()" class="task-btn"></select>
-
-      <!-- Mission Tasks -->
-      <div id="taskList" class="task-list"></div>
+      <div class="mission-list" id="missionList">
+        <!-- JS Will Load Missions Here -->
+      </div>
     </section>
   </div>
 
   <script src="script.js"></script>
   <script>
-    // Header + navbar load with active link
+    // Load Header
     fetch("header.html")
       .then(res => res.text())
       .then(data => {
@@ -38,81 +37,83 @@
         });
       });
 
-    // Mission Data
-    const missions = Array.from({ length: 10 }, (_, i) => ({
-      id: i + 1,
-      name: `Mission ${i + 1}`,
-      energyCost: 5 + i * 2,
-      baseXP: 10 + i * 5,
-      baseCash: 20 + i * 10
-    }));
+    const missions = [
+      {
+        title: "Street Snatch",
+        story: "Snatch a gold chain from a rival on the street.",
+        energy: 10,
+        rewardCash: 100,
+        rewardXP: 20
+      },
+      {
+        title: "Pickpocket Elite",
+        story: "Lift a wallet from a cop at the train station.",
+        energy: 15,
+        rewardCash: 150,
+        rewardXP: 30
+      },
+      {
+        title: "Alley Fight",
+        story: "Defeat two gang members in a back alley.",
+        energy: 20,
+        rewardCash: 200,
+        rewardXP: 40
+      },
+      {
+        title: "Carjack Escape",
+        story: "Steal a getaway car under heavy watch.",
+        energy: 25,
+        rewardCash: 300,
+        rewardXP: 60
+      },
+      {
+        title: "Underground Deal",
+        story: "Smuggle rare goods through the sewer system.",
+        energy: 30,
+        rewardCash: 400,
+        rewardXP: 80
+      }
+    ];
 
-    // Initialize unlock progress
-    if (!localStorage.getItem("missionUnlock")) {
-      localStorage.setItem("missionUnlock", "1");
-    }
+    function loadMissions() {
+      const list = document.getElementById("missionList");
+      const completed = JSON.parse(localStorage.getItem("completedMissions") || "[]");
 
-    // Load dropdown
-    function loadMissionsDropdown() {
-      const unlocked = parseInt(localStorage.getItem("missionUnlock")) || 1;
-      const select = document.getElementById("missionSelect");
-      select.innerHTML = "";
+      missions.forEach((m, index) => {
+        const isUnlocked = index === 0 || completed.includes(index - 1);
+        const isCompleted = completed.includes(index);
 
-      missions.forEach(m => {
-        const option = document.createElement("option");
-        option.value = m.id;
-        option.textContent = m.name + (m.id > unlocked ? " (Locked)" : "");
-        option.disabled = m.id > unlocked;
-        select.appendChild(option);
+        const div = document.createElement("div");
+        div.className = "mission-card";
+        if (!isUnlocked) div.classList.add("locked");
+
+        div.innerHTML = `
+          <h3>${m.title} ${isCompleted ? '<span class="badge done">✓ Completed</span>' : ''}</h3>
+          <p>${m.story}</p>
+          <p><strong>Energy:</strong> ⚡ ${m.energy} | 💵 $${m.rewardCash} | 💠 ${m.rewardXP} XP</p>
+          ${isUnlocked && !isCompleted ? `<button onclick="doMission(${index})">Start Mission</button>` : ''}
+          ${!isUnlocked ? `<p class="locked-text"><i class="fa-solid fa-lock"></i> Locked. Complete previous mission.</p>` : ''}
+        `;
+
+        list.appendChild(div);
       });
-
-      loadMission(); // Load the default mission
     }
 
-    // Load mission tasks
-    function loadMission() {
-      const missionId = parseInt(document.getElementById("missionSelect").value);
-      const taskList = document.getElementById("taskList");
-      taskList.innerHTML = "";
+    function doMission(index) {
+      const m = missions[index];
+      const completed = JSON.parse(localStorage.getItem("completedMissions") || "[]");
 
-      const mission = missions.find(m => m.id === missionId);
+      if (!useEnergy(m.energy)) return;
 
-      for (let i = 1; i <= 10; i++) {
-        const task = document.createElement("button");
-        task.className = "task-btn";
-        task.textContent = `Submission ${i} - Energy: ${mission.energyCost}, XP: ${mission.baseXP * i}, $${mission.baseCash * i}`;
-        task.onclick = () => runMission(mission, i);
-        taskList.appendChild(task);
-      }
+      addXP(m.rewardXP);
+      addCash(m.rewardCash);
+      completed.push(index);
+      localStorage.setItem("completedMissions", JSON.stringify(completed));
+      alert(`✅ ${m.title} completed!\n+${m.rewardXP} XP\n+$${m.rewardCash}`);
+      location.reload(); // refresh to unlock next
     }
 
-    // Run a mission submission
-    function runMission(mission, count) {
-      const energy = parseInt(localStorage.getItem("energy")) || 0;
-      const xp = parseInt(localStorage.getItem("xp")) || 0;
-      const cash = parseInt(localStorage.getItem("cash")) || 0;
-
-      if (energy < mission.energyCost) {
-        alert("Not enough energy!");
-        return;
-      }
-
-      localStorage.setItem("energy", energy - mission.energyCost);
-      localStorage.setItem("xp", xp + mission.baseXP * count);
-      localStorage.setItem("cash", cash + mission.baseCash * count);
-
-      // Unlock next mission if all 10 submissions are done
-      const unlocked = parseInt(localStorage.getItem("missionUnlock")) || 1;
-      if (mission.id === unlocked && count === 10 && unlocked < 10) {
-        localStorage.setItem("missionUnlock", unlocked + 1);
-        alert(`🎉 ${mission.name} completed! Mission ${unlocked + 1} unlocked!`);
-        loadMissionsDropdown();
-      }
-
-      updateStats(); // From script.js
-    }
-
-    loadMissionsDropdown();
+    loadMissions();
   </script>
 </body>
 </html>
