@@ -10,7 +10,7 @@
 <body>
   <div class="container glassmorphic">
 
-    <!-- Header will be loaded dynamically -->
+    <!-- Header + navbar will load here -->
     <div id="header-placeholder"></div>
 
     <!-- Stats Section -->
@@ -38,10 +38,9 @@
       .then(data => {
         document.getElementById("header-placeholder").innerHTML = data;
 
-        // ✅ Highlight current page in navbar
+        // Highlight current page in navbar
         const currentPage = window.location.pathname.split("/").pop();
-        const links = document.querySelectorAll("#nav-bar a");
-        links.forEach(link => {
+        document.querySelectorAll("#nav-bar a").forEach(link => {
           if (link.getAttribute("href") === currentPage) {
             link.classList.add("active");
           }
