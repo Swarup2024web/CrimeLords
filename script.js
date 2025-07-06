@@ -1,40 +1,34 @@
-// === Default values ===
-if (!localStorage.getItem("cash")) localStorage.setItem("cash", "100");
-if (!localStorage.getItem("xp")) localStorage.setItem("xp", "0");
-if (!localStorage.getItem("health")) localStorage.setItem("health", "100");
-if (!localStorage.getItem("energy")) localStorage.setItem("energy", "50");
+// Initialize default stats if not already set
+if (localStorage.getItem("xp") === null) localStorage.setItem("xp", "0");
+if (localStorage.getItem("cash") === null) localStorage.setItem("cash", "100");
+if (localStorage.getItem("health") === null) localStorage.setItem("health", "100");
+if (localStorage.getItem("energy") === null) localStorage.setItem("energy", "100");
 
-// === Set values to HTML if present ===
+// Update top stats and bars
 function updateStats() {
-  const cash = parseInt(localStorage.getItem("cash"));
-  const xp = parseInt(localStorage.getItem("xp"));
-  const health = parseInt(localStorage.getItem("health"));
-  const energy = parseInt(localStorage.getItem("energy"));
+  const xp = parseInt(localStorage.getItem("xp")) || 0;
+  const cash = parseInt(localStorage.getItem("cash")) || 0;
+  const health = parseInt(localStorage.getItem("health")) || 0;
+  const energy = parseInt(localStorage.getItem("energy")) || 0;
 
-  const cashElem = document.getElementById("cash");
-  const xpElem = document.getElementById("xp");
-  const healthElem = document.getElementById("health-val");
-  const energyElem = document.getElementById("energy-val");
+  if (document.getElementById("xp"))        document.getElementById("xp").textContent = xp;
+  if (document.getElementById("cash"))      document.getElementById("cash").textContent = cash;
+  if (document.getElementById("health-val")) document.getElementById("health-val").textContent = health;
+  if (document.getElementById("energy-val")) document.getElementById("energy-val").textContent = energy;
 
-  const healthBar = document.getElementById("health-bar");
-  const energyBar = document.getElementById("energy-bar");
-
-  if (cashElem) cashElem.textContent = cash;
-  if (xpElem) xpElem.textContent = xp;
-
-  if (healthElem) healthElem.textContent = health;
-  if (energyElem) energyElem.textContent = energy;
-
-  if (healthBar) healthBar.style.width = `${health}%`;
-  if (energyBar) energyBar.style.width = `${energy}%`;
+  if (document.getElementById("health-bar")) {
+    document.getElementById("health-bar").style.width = `${health}%`;
+  }
+  if (document.getElementById("energy-bar")) {
+    document.getElementById("energy-bar").style.width = `${energy}%`;
+  }
 }
 
-// === Regeneration logic ===
+// Regenerate health (+10 per sec) and energy (+5 per sec)
 setInterval(() => {
-  let health = parseInt(localStorage.getItem("health"));
-  let energy = parseInt(localStorage.getItem("energy"));
+  let health = parseInt(localStorage.getItem("health")) || 0;
+  let energy = parseInt(localStorage.getItem("energy")) || 0;
 
-  // Add values
   if (health < 100) {
     health = Math.min(100, health + 10);
     localStorage.setItem("health", health);
@@ -46,7 +40,7 @@ setInterval(() => {
   }
 
   updateStats();
-}, 1000); // every 1 second
+}, 1000);
 
-// Initial load
+// Update on page load
 updateStats();
