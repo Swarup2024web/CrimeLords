@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jail - Crime Lords</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container glassmorphic">
+
+    <div id="header-placeholder"></div>
+
+    <section class="jail-section">
+      <h2><i class="fa-solid fa-gavel"></i> Jail</h2>
+
+      <div id="jail-status" class="jail-box">
+        <p id="jail-message">Checking your criminal status...</p>
+      </div>
+
+      <button onclick="simulateArrest()">👮 Simulate Arrest (Test)</button>
+    </section>
+
+    <div id="navbar-placeholder"></div>
+  </div>
+
+  <script src="script.js"></script>
+
+  <script>
+    function simulateArrest() {
+      const releaseTime = Date.now() + 30000; // 30 seconds
+      localStorage.setItem("jailReleaseTime", releaseTime);
+      checkJailStatus();
+    }
+
+    function checkJailStatus() {
+      const jailBox = document.getElementById("jail-message");
+      const releaseTime = parseInt(localStorage.getItem("jailReleaseTime") || "0");
+
+      if (Date.now() >= releaseTime || !releaseTime) {
+        jailBox.innerHTML = "✅ You're free. Keep a low profile.";
+        localStorage.removeItem("jailReleaseTime");
+      } else {
+        const remaining = Math.ceil((releaseTime - Date.now()) / 1000);
+        jailBox.innerHTML = `🚔 You're in jail for <strong>${remaining}</strong> more seconds...`;
+
+        setTimeout(checkJailStatus, 1000);
+      }
+    }
+
+    checkJailStatus();
+
+    // Load header and navbar
+    fetch("header.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
+      });
+
+    fetch("navbar.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("navbar-placeholder").innerHTML = data;
+      });
+  </script>
+</body>
+</html>
